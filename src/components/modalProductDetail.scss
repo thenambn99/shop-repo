@@ -1,0 +1,37 @@
+.modal-detail {
+  .modal-dialog {
+    max-width: 800px;
+  }
+  .product-img {
+    max-width: 320px;
+  }
+}
+
+/* it will support chrome and firefox */
+.quantity input[type="number"]::-webkit-inner-spin-button,
+.quantity input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.quantity input {
+  max-width: 60px;
+  border: 1px solid #e6e6e6;
+  text-align: center;
+  font-weight: 550;
+  background: white;
+  border-radius: 0%;
+}
+
+.quantity {
+  .btn {
+    min-width: 45px;
+    border: 1px solid #e6e6e6;
+    border-radius: 0;
+    cursor: pointer;
+    &:hover {
+      border-color: #717fe0;
+      background-color: #717fe0;
+      color: #fff;
+    }
+  }
+}

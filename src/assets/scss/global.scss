@@ -1,0 +1,43 @@
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 50px;
+  padding-left: 50px;
+  &-fluid {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+  }
+}
+
+.content-layout {
+  padding-top: 80px;
+}
+
+.header {
+  box-shadow: 0 0px 3px 0px rgb(0 0 0 / 20%);
+  height: 90px;
+  background-color: #fff;
+  z-index: 100;
+  .logo {
+    margin-right: 60px;
+    a {
+      color: #333333;
+      font-weight: 550;
+      text-decoration: none;
+    }
+  }
+}
+
+.menu {
+  a {
+    color: #333333;
+    font-weight: 550;
+    text-decoration: none;
+    &:hover {
+      color: #6c7ae0;
+    }
+  }
+  .active {
+    color: #6c7ae0;
+  }
+}

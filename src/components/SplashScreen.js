@@ -1,16 +1,16 @@
 import { Backdrop } from "@mui/material";
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import "./splashscreen.scss";
+import "./SplashScreen.scss";
 import { styled } from "@mui/material/styles";
 
 const BackdropStyled = styled(Backdrop)({
   backgroundColor: "rgb(80 80 80 / 50%)",
 });
 
-function SplashScreen() {
+function SplashScreen({open}) {
   return (
-    <BackdropStyled open={true}>
+    <BackdropStyled open={open}>
       <CircularProgress/>
     </BackdropStyled>
   );

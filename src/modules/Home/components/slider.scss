@@ -1,0 +1,38 @@
+.slider {
+  position: relative;
+
+  &-arrow {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    font-size: 40px;
+    top: 50%;
+    width: 100%;
+
+    .arrow-icon {
+      margin: 0 30px;
+      cursor: pointer;
+    }
+  }
+
+  &-img {
+    transform: translateX(100%);
+  }
+
+  &-img-active {
+    transform: none;
+    transition: transform 0.5s ease-out;
+  }
+  &-title {
+    position: absolute;
+    top: 30%;
+    font-size: 24px;
+    margin-left: 250px;
+  }
+
+  &-content {
+    position: absolute;
+    top: 40%;
+    margin-left: 250px;
+  }
+}

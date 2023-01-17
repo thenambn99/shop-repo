@@ -1,0 +1,22 @@
+.footer {
+  background-color: #333333;
+  color: #fff;
+  .row {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+  }
+  &-icon {
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+    margin: 0 10px;
+    &:hover {
+      cursor: pointer;
+      color: orange;
+    }
+  }
+  p:hover {
+    cursor: pointer;
+    color: orange;
+  }
+}

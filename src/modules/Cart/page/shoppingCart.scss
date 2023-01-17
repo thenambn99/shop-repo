@@ -1,0 +1,18 @@
+.shopping-cart {
+  min-height: 650px;
+  .img {
+    max-height: 100px;
+    max-width: 100px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.cart-total {
+  height: 500px;
+  border: 1px solid #ccc;
+  .total-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+}

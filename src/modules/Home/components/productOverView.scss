@@ -1,0 +1,19 @@
+.product-img {
+   &:hover {
+    .btn-buy {
+      transform: translateY(-30px);
+      transition: ease-in 0.3s;
+      .btn {
+        color: #fff;
+        display: block;
+      }
+    }
+  }
+}
+
+.btn-buy {
+  bottom: 0px;
+  .btn {
+    display: none;
+  }
+}
