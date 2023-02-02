@@ -5,11 +5,11 @@ import { useRoutes, Navigate } from "react-router-dom";
 import SplashScreen from "@/components/SplashScreen";
 import { Suspense } from "react";
 import ShoppingCart from "@/modules/Cart/page/ShoppingCart";
+import Login from "@/modules/Login/page/Login";
 
 const Home = React.lazy(() => import("@/modules/Home/page/Home"));
 const About = React.lazy(() => import("@/modules/About/page/About"));
 const Contact = React.lazy(() => import("@/modules/Contact/page/Contact"));
-const Login = React.lazy(() => import("@/modules/Login/page/Login"));
 const Payment = React.lazy(() => import("@/modules/Payment/page/Payment"));
 const Products = React.lazy(() => import("@/modules/Products/page/Products"));
 
@@ -61,6 +61,10 @@ const RootRoutes = () => {
         },
         {
           path: "login",
+          element: <Login />,
+        },
+        {
+          path: "register",
           element: <Login />,
         },
         {

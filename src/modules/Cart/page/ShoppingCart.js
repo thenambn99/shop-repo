@@ -9,8 +9,12 @@ import {
 } from "../redux/cartSlice";
 import swal from 'sweetalert'
 import "./shoppingCart.scss";
+import { getAuth } from "@/utils/localStorage";
+import { useNavigate } from "react-router-dom";
 const ShoppingCart = () => {
+  const navigate = useNavigate()
   const { cart } = useSelector((state) => state.cart);
+  const auth = JSON.parse(getAuth())
   const dispatch = useDispatch();
   let count = 0;
   const subTotal = cart.reduce((acc, curr) => {
@@ -37,6 +41,21 @@ const ShoppingCart = () => {
     });
   };
 
+  const handlePay = () => {
+    if (!auth) {
+      swal({
+        title: "Vui lòng đăng nhập để thanh toán",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          navigate("/login")
+        }
+      });
+    }
+  }
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -164,7 +183,7 @@ const ShoppingCart = () => {
               <span>Giảm giá:</span>
               <p className="mt-4">Tổng tiền phải trả:</p>
               <div className="d-flex justify-content-center">
-                <button className="btn btn-warning">Thanh toán</button>
+                <button className="btn btn-warning" onClick={() => handlePay()}>Thanh toán</button>
               </div>
             </div>
           </div>
