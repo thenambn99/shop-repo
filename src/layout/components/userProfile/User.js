@@ -31,7 +31,6 @@ const User = () => {
             </span>
             {isHover && (
               <div className="user-dropdown">
-                <div className="mb-2 mt-1 px-2 option">Đơn mua</div>
                 <div className="mb-1 px-2 option" onClick={() => handleLogOut()}>Đăng xuất</div>
               </div>
             )}

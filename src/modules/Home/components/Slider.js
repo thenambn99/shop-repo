@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider1 from "@/assets/imgs/slide-01.jpg";
 import Slider2 from "@/assets/imgs/slide-02.jpg";
 import Slider3 from "@/assets/imgs/slide-03.jpg";
+import MySlider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "./slider.scss";
 
 const sliderData = [
@@ -23,54 +26,23 @@ const sliderData = [
 ];
 
 const Slider = () => {
-  const [current, setCurrent] = useState(0);
-  const [showToggle, setShowToggle] = useState(false);
-  const length = sliderData.length;
-
-  const nextSlide = () => {
-    setCurrent(current === length - 1 ? 0 : current + 1);
+  const settings = {
+    dots: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
-
-  const prevSlide = () => {
-    setCurrent(current === 0 ? length - 1 : current - 1);
-  };
-
-  const handleShowToggle = (isShow) => {
-    setShowToggle(isShow);
-  };
-
   return (
-    <div
-      className="slider"
-      onMouseOver={() => handleShowToggle(true)}
-      onMouseOut={() => handleShowToggle(false)}
-    >
-      <div className="slider-arrow">
-        {showToggle ? (
-          <>
-            <span className="arrow-icon" onClick={() => prevSlide()}>
-              <i className="bi bi-caret-left-fill"></i>
-            </span>
-            <span className="arrow-icon" onClick={() => nextSlide()}>
-              <i className="bi bi-caret-right-fill"></i>
-            </span>
-          </>
-        ) : null}
-      </div>
-      {sliderData.map((s, i) => (
-        <div
-          key={i}
-          className={i === current ? "slider-img-active" : "slider-img"}
-        >
-          {i === current && (
-            <div>
-              <span className="slider-title">{s.title}</span>
-              <h1 className="slider-content">{s.content}</h1>
-              <img src={s.img} alt="" className="w-100" />
-            </div>
-          )}
-        </div>
-      ))}
+    <div className="slider">
+      <MySlider {...settings}>
+        {sliderData.map((s, i) => (
+          <div key={i}>
+            <span className="slider-title">{s.title}</span>
+            <h1 className="slider-content">{s.content}</h1>
+            <img src={s.img} alt="" className="w-100" />
+          </div>
+        ))}
+      </MySlider>
     </div>
   );
 };

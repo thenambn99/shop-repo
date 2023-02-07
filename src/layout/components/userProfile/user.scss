@@ -10,7 +10,7 @@
   position: relative;
   &-dropdown {
     position: absolute;
-    bottom: -64px;
+    bottom: -30px;
     left: -36px;
     width: 100px;
     background-color: #717fe0;
@@ -29,8 +29,8 @@
   }
   .option {
     &:hover {
-      background-color: #f2f3fb;
-      color: #333;
+      // background-color: #f2f3fb;
+      // color: #333;
       cursor: pointer;
     }
   }

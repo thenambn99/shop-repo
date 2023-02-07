@@ -3,31 +3,39 @@ import shopIcon from "@/assets/imgs/shop-icon.png";
 import { Link, NavLink } from "react-router-dom";
 import Cart from "./cartHeader/Cart";
 import User from "./userProfile/User";
+import { getAuth } from "@/utils/localStorage";
 
-const headerMenu = [
-  {
-    path: "/",
-    name: "Trang chủ",
-  },
-  {
-    path: "/products",
-    name: "Sản phẩm",
-  },
-  // {
-  //   path: "/shopping-cart",
-  //   name: "Đơn hàng"
-  // },
-  {
-    path: "/about",
-    name: "Giới thiệu",
-  },
-  {
-    path: "/contact",
-    name: "Liên hệ",
-  },
-];
 
 const Header = () => {
+  const auth = JSON.parse(getAuth())
+  const headerMenu = [
+    {
+      path: "/",
+      name: "Trang chủ",
+    },
+    {
+      path: "/products",
+      name: "Sản phẩm",
+    },
+    {
+      path: "/coupon",
+      name: "Mã giảm giá"
+    },
+    {
+      path: "/about",
+      name: "Giới thiệu",
+    },
+    {
+      path: "/contact",
+      name: "Liên hệ",
+    },
+  ];
+  if (auth) {
+    headerMenu.push({
+      path: "/payment",
+      name: "Đơn hàng của bạn"
+    })
+  }
   return (
     <div className="position-fixed w-100 header">
       <div className="d-flex container h-100">

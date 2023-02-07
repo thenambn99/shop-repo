@@ -1,20 +1,30 @@
 import { CONSTS } from "@/consts";
 import readImg from "@/utils/readImg";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   discountProduct,
   increaseProduct,
   removeProduct,
 } from "../redux/cartSlice";
-import swal from 'sweetalert'
+import swal from "sweetalert";
 import "./shoppingCart.scss";
 import { getAuth } from "@/utils/localStorage";
 import { useNavigate } from "react-router-dom";
+import SplashScreen from "@/components/SplashScreen";
+import axiosInstance from "@/api/axiosInstance";
+import { toast } from "react-hot-toast";
+import dayjs from "dayjs";
+
 const ShoppingCart = () => {
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const [isChangeCode, setIsChangeCode] = useState(false);
+  const [couponCode, setCouponCode] = useState();
+  const [coupon, setCoupon] = useState();
+  const [total, setTotal] = useState();
+  const navigate = useNavigate();
   const { cart } = useSelector((state) => state.cart);
-  const auth = JSON.parse(getAuth())
+  const auth = JSON.parse(getAuth());
   const dispatch = useDispatch();
   let count = 0;
   const subTotal = cart.reduce((acc, curr) => {
@@ -33,14 +43,57 @@ const ShoppingCart = () => {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    })
-    .then((willDelete) => {
+    }).then((willDelete) => {
       if (willDelete) {
         dispatch(removeProduct({ id: id, size: size }));
       }
     });
   };
 
+  const handleChangeCouponCode = (e) => {
+    setCouponCode(e.target.value);
+  };
+
+  const applyCode = async () => {
+    setTotal(subTotal);
+    setLoading(true);
+    const res = await axiosInstance.post("getCouponByCode", {
+      code: couponCode,
+    });
+    if (res.data.success) {
+      if (dayjs(res.data.result.coupon_end).diff(dayjs(), "d") >= 0 && dayjs(res.data.result.coupon_start).diff(dayjs(), "d") < 0) {
+        setCoupon(res.data.result);
+        toast.success("Áp dụng mã thành công", {
+          position: "bottom-right",
+          duration: 2000,
+        });
+        if (res.data.result.coupon_type === 1) {
+          setTotal(total - (total * res.data.result.coupon_value) / 100);
+        }
+        if (res.data.result.coupon_type === 2) {
+          setTotal(total - res.data.result.coupon_value);
+        }
+        setIsChangeCode(true)
+      } else {
+        toast.error("Mã đã hết hạn hoặc chưa đến thời gian sử dụng", {
+          position: "bottom-right",
+          duration: 2000,
+        });
+      }
+    } else {
+      toast.error("Không có mã phù hợp", {
+        position: "bottom-right",
+        duration: 2000,
+      });
+    }
+    setLoading(false);
+  };
+
+  const changeCode = () => {
+    setTotal(subTotal)
+    setIsChangeCode(false)
+    setCoupon(null)
+  }
   const handlePay = () => {
     if (!auth) {
       swal({
@@ -48,16 +101,22 @@ const ShoppingCart = () => {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      })
-      .then((willDelete) => {
+      }).then((willDelete) => {
         if (willDelete) {
-          navigate("/login")
+          navigate("/login");
         }
       });
     }
-  }
+  };
+
   useEffect(() => {
+    setTotal(subTotal)
+  }, [subTotal])
+  
+  useEffect(() => {
+    setTotal(subTotal);
     window.scrollTo(0, 0);
+    // eslint-disable-next-line
   }, []);
   return (
     <div className="container shopping-cart">
@@ -110,7 +169,7 @@ const ShoppingCart = () => {
                           <button
                             className="btn"
                             onClick={() => discount(p.id, p.product_size)}
-                            disabled={p.product_quantity === 1}
+                            disabled={p.product_quantity === 1 || isChangeCode}
                           >
                             -
                           </button>
@@ -124,6 +183,7 @@ const ShoppingCart = () => {
                           <button
                             className="btn"
                             onClick={() => increase(p.id, p.product_size)}
+                            disabled={isChangeCode}
                           >
                             +
                           </button>
@@ -169,9 +229,26 @@ const ShoppingCart = () => {
                 type="text"
                 className="form-control mt-4"
                 placeholder="Điền mã giảm giá nếu có"
+                value={couponCode}
+                onChange={handleChangeCouponCode}
+                disabled={isChangeCode}
               />
               <div className="d-flex justify-content-center mt-4">
-                <button className="btn btn-primary">Áp dụng mã giảm giá</button>
+                {isChangeCode ? (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => changeCode()}
+                  >
+                    Đổi mã giảm giá
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => applyCode()}
+                  >
+                    Áp dụng mã giảm giá
+                  </button>
+                )}
               </div>
               <p className="mt-4">
                 Dự kiến:{" "}
@@ -180,15 +257,35 @@ const ShoppingCart = () => {
                   currency: "VND",
                 })}{" "}
               </p>
-              <span>Giảm giá:</span>
-              <p className="mt-4">Tổng tiền phải trả:</p>
+              <span>
+                {coupon
+                  ? coupon.coupon_type === 1
+                    ? `Giảm giá: ${coupon.coupon_value}%`
+                    : `Giảm giá: ${coupon.coupon_value.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}`
+                  : "Giảm giá:"}
+              </span>
+              <p className="mt-4">Tổng tiền phải trả: </p>
+              <p className="fw-bold d-flex justify-content-center">
+                {total
+                  ? total.toLocaleString("it-IT", {
+                      style: "currency",
+                      currency: "VND",
+                    })
+                  : ""}
+              </p>
               <div className="d-flex justify-content-center">
-                <button className="btn btn-warning" onClick={() => handlePay()}>Thanh toán</button>
+                <button className="btn btn-warning" onClick={() => handlePay()}>
+                  Thanh toán
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <SplashScreen open={loading} />
     </div>
   );
 };
