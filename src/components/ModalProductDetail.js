@@ -92,6 +92,12 @@ const ModalProductDetail = ({ productId, openModal, handleCloseModal }) => {
         position: "bottom-center",
         duration: 3000,
       });
+    } 
+    else if (Number(quantity) === 0) {
+      toast.error("Vui lòng chọn ít nhất 1 sản phẩm", {
+        position: "bottom-center",
+        duration: 3000,
+      });
     } else {
       dispatch(
         addToCart({

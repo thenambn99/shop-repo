@@ -26,7 +26,7 @@ const Coupon = () => {
     // eslint-disable-next-line
   }, []);
   return (
-    <div style={{ margin: "50px 150px" }}>
+    <div style={{ margin: "50px 150px", minHeight: "177px" }}>
       <div>Mã khuyến mại của Shop</div>
       <table className="table table-hover align-middle mt-3">
         <thead>

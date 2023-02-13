@@ -6,6 +6,7 @@ import {
   discountProduct,
   increaseProduct,
   removeProduct,
+  resetCart
 } from "../redux/cartSlice";
 import swal from "sweetalert";
 import "./shoppingCart.scss";
@@ -45,6 +46,9 @@ const ShoppingCart = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
+        setCoupon(null)
+        setIsChangeCode(false)
+        setCouponCode('')
         dispatch(removeProduct({ id: id, size: size }));
       }
     });
@@ -61,7 +65,7 @@ const ShoppingCart = () => {
       code: couponCode,
     });
     if (res.data.success) {
-      if (dayjs(res.data.result.coupon_end).diff(dayjs(), "d") >= 0 && dayjs(res.data.result.coupon_start).diff(dayjs(), "d") < 0) {
+      if (dayjs(res.data.result.coupon_end).diff(dayjs(), "d") >= 0 && dayjs(res.data.result.coupon_start).diff(dayjs(), "d") <= 0) {
         setCoupon(res.data.result);
         toast.success("Áp dụng mã thành công", {
           position: "bottom-right",
@@ -94,6 +98,27 @@ const ShoppingCart = () => {
     setIsChangeCode(false)
     setCoupon(null)
   }
+
+  const createOrder = async (params) => {
+    setLoading(true)
+    const res = await axiosInstance.post('createOrder', params)
+    if (res.data.success) {
+      toast.success("Gửi đơn hàng thành công", {
+        position: "bottom-center",
+        duration: 2000
+      })
+      setLoading(false)
+      dispatch(resetCart())
+      navigate("/payment")
+    } else {
+      toast.error("Có lỗi từ hệ thống, vui lòng thử lại", {
+        position: "bottom-center",
+        duration: 2000
+      })
+    }
+    setLoading(false)
+  }
+
   const handlePay = () => {
     if (!auth) {
       swal({
@@ -107,6 +132,29 @@ const ShoppingCart = () => {
         }
       });
     }
+
+    if (cart.length < 1) {
+      toast.error("Vui lòng thêm sản phẩm vào giỏ", {
+        position: "bottom-center",
+        duration: 3000
+      })
+      return
+    }
+    const productList = cart.map((p) => {
+      return {
+        product_id: p.id,
+        product_size: p.product_size,
+        product_quantity: p.product_quantity
+      }
+    })
+    const params = {
+      user_id: auth.id,
+      order_status: 1,
+      order_date: new Date(),
+      total_price: total,
+      cart: productList
+    }
+    createOrder(params)
   };
 
   useEffect(() => {

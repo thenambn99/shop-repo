@@ -31,10 +31,13 @@ const cartSlice = createSlice({
       const index = state.cart.findIndex((p) => p.id === action.payload.id && p.product_size === action.payload.size);
       state.cart.splice(index, 1)
     },
+    resetCart: (state) => {
+      state.cart = []
+    }
   },
 });
 
-export const { addToCart, discountProduct, increaseProduct, removeProduct } =
+export const { addToCart, discountProduct, increaseProduct, removeProduct, resetCart } =
   cartSlice.actions;
 
 export default cartSlice;
