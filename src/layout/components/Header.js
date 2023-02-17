@@ -33,7 +33,7 @@ const Header = () => {
   if (auth) {
     headerMenu.push({
       path: "/payment",
-      name: "Đơn hàng của bạn"
+      name: "Lịch sử mua hàng"
     })
   }
   return (
