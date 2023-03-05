@@ -11,5 +11,23 @@ export const CONSTS = {
     3: "Đang giao",
     4: "Đã giao",
     5: "Đã hủy",
-  }
+  },
+  PRODUCT__SIZE: [
+    {
+      value: 1,
+      name: "M"
+    },
+    {
+      value: 2,
+      name: "L"
+    },
+    {
+      value: 3,
+      name: "XL"
+    },
+    {
+      value: 4,
+      name: "XXL"
+    }
+  ]
 }

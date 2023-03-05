@@ -6,10 +6,13 @@ import axiosInstance from "@/api/axiosInstance";
 import { toast } from "react-hot-toast";
 import { CONSTS } from "@/consts";
 import swal from "sweetalert";
+import ModalOrderDetail from "@/components/ModalOrderDetail";
 
 const Payment = () => {
   const [payment, setPayment] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false)
+  const [orderId, setOrderId] = useState()
   const auth = JSON.parse(getAuth());
   const getPaymentList = async () => {
     setLoading(true);
@@ -57,6 +60,15 @@ const Payment = () => {
       }
     });
   };
+
+  const handleOpenModal = (id) => {
+    setOrderId(id)
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }
   useEffect(() => {
     getPaymentList()
     // eslint-disable-next-line 
@@ -100,12 +112,16 @@ const Payment = () => {
                       Hủy đơn hàng
                     </button>
                   </div>
+                  <div onClick={() => handleOpenModal(p.id)}>
+                    <button className="btn btn-secondary"><i className="bi bi-eye"></i></button>
+                  </div>
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <ModalOrderDetail orderId={orderId} openModal={openModal} handleCloseModal={handleCloseModal} />
       <SplashScreen open={loading} />
     </div>
   );
