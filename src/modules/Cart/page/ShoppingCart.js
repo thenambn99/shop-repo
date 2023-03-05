@@ -154,7 +154,16 @@ const ShoppingCart = () => {
       total_price: total,
       cart: productList
     }
-    createOrder(params)
+    swal({
+      title: "Bạn có chắc chắn muốn đặt hàng?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((confirm) => {
+      if (confirm) {
+        createOrder(params)
+      }
+    });
   };
 
   useEffect(() => {
