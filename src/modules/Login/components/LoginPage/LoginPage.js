@@ -5,20 +5,26 @@ import axiosInstance from "@/api/axiosInstance";
 import SplashScreen from "@/components/SplashScreen";
 import { useState } from "react";
 import { setAccessToken, setAuth } from "@/utils/localStorage";
+import { toast } from "react-hot-toast";
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const requestLogin = async (data) => {
-    setLoading(true)
-    const res = await axiosInstance.post("login", data)
-    if (res) {
-      setAccessToken(res.data?.accessToken)
-      setAuth(res.data?.result)
-      navigate("/")
+    setLoading(true);
+    const res = await axiosInstance.post("login", data);
+    if (res.data.success) {
+      setAccessToken(res.data?.accessToken);
+      setAuth(res.data?.result);
+      navigate("/");
+    } else {
+      toast.error(`${res.data.message}`, {
+        position: "bottom-right",
+        duration: 2000,
+      });
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -26,7 +32,7 @@ const LoginPage = () => {
     },
     onSubmit: (values) => {
       // console.log(values);
-      requestLogin(values)
+      requestLogin(values);
     },
   });
   return (
@@ -85,7 +91,7 @@ const LoginPage = () => {
           </div>
         </div>
       </form>
-      <SplashScreen open={loading}/>
+      <SplashScreen open={loading} />
     </div>
   );
 };
